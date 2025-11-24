@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<a href="/" style="text-decoration: none; color: #3498db; font-weight: bold;">← Назад к галерее</a>
+
+<div style="text-align: center; margin-top: 30px;">
+    <h1>{{ photo.title }}</h1>
+
+    <!-- БОЛЬШАЯ ВЕРСИЯ ФОТО -->
+    <img src="{{ photo.image_large }}"
+         style="max-width: 80%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+
+    <div style="margin-top: 20px; font-size: 18px;">
+        <p><strong>Название:</strong> {{ photo.title }}</p>
+        <p><strong>Описание:</strong> {{ photo.description }}</p>
+    </div>
+
+    <!-- НАВИГАЦИЯ МЕЖДУ ФОТО -->
+    <div style="display: flex; justify-content: space-between; margin-top: 30px; padding: 0 20px;">
+        <!-- Кнопка "Предыдущее" -->
+        {% if photo.id > 1 %}
+        <a href="/photo/{{ photo.id|add:'-1' }}/"
+           style="text-decoration: none; background: #3498db; color: white; padding: 10px 20px; border-radius: 5px;">
+            ← Фото {{ photo.id|add:'-1' }}
+        </a>
+        {% else %}
+        <div></div>
+        {% endif %}
+
+        <!-- Кнопка "Следующее" -->
+        {% if photo.id < total_photos %}
+        <a href="/photo/{{ photo.id|add:'1' }}/"
+           style="text-decoration: none; background: #3498db; color: white; padding: 10px 20px; border-radius: 5px;">
+            Фото {{ photo.id|add:'1' }} →
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
