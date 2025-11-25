@@ -32,6 +32,13 @@
         <a href="/">Галерея</a>
         <a href="/services/">Услуги и цены</a>
         <a href="/register/">Регистрация</a>
+    <!-- ДОБАВИЛИ ССЫЛКУ НА ВХОД/ВЫХОД -->
+        {% if user.is_authenticated %}
+            <span style="color: white;">Привет, {{ user.username }}!</span>
+            <a href="/logout/" style="color: #ff6b6b;">Выйти</a>
+        {% else %}
+            <a href="/login/">Войти</a>
+        {% endif %}
     </div>
 
 

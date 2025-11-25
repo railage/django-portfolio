@@ -11,18 +11,17 @@ from . import views
     path('board/resp/', views.board_resp, name='board_resp'),
 ]"""
 
-urlpatterns = [
-    path('', views.home, name='home'),
-    path('photo/<int:photo_id>/', views.photo_detail, name='photo_detail'),
-    path('services/', views.services, name='services'),
-]
-
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.home, name='home'),
     path('photo/<int:photo_id>/', views.photo_detail, name='photo_detail'),
     path('services/', views.services, name='services'),
-    path('register/', views.register, name='register'),  # ← ДОБАВИЛИ
+    path('add-shooting-type/', views.add_shooting_type, name='add_shooting_type'),
+    path('register/', views.register, name='register'),
+    path('login/', auth_views.LoginView.as_view(template_name='portfolio/login.html'), name='login'),
+    # НАША ПРОСТАЯ ФУНКЦИЯ ВЫХОДА
+    path('logout/', views.custom_logout, name='logout'),
 ]

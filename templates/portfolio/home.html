@@ -4,16 +4,35 @@
 <h1>Мое портфолио</h1>
 
 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px;">
-    <!-- ДОБАВЛЯЕМ ОТКРЫВАЮЩИЙ ТЕГ FOR -->
+    <!-- ФОТО ИЗ ПОРТФОЛИО -->
     {% for photo in photos %}
     <div>
         <a href="/photo/{{ photo.id }}/">
             <img src="{{ photo.image_url }}"
                  style="width: 100%; height: 250px; object-fit: cover; border-radius: 10px;">
         </a>
-        <p style="text-align: center; margin-top: 10px;">{{ photo.title }}</p>
+        <p style="text-align: center; margin-top: 10px; font-weight: bold;">{{ photo.title }}</p>
     </div>
-    {% endfor %}  <!-- ЗАКРЫВАЮЩИЙ ТЕГ FOR -->
+    {% endfor %}
+
+    <!-- ВИДЫ СЪЕМОК ИЗ УСЛУГ -->
+    {% for shooting in shooting_types %}
+    <div>
+        {% if shooting.image_url %}
+        <a href="/services/">
+            <img src="{{ shooting.image_url }}"
+                 style="width: 100%; height: 250px; object-fit: cover; border-radius: 10px;">
+        </a>
+        {% else %}
+        <a href="/services/">
+            <div style="width: 100%; height: 250px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px;">
+                📸 {{ shooting.name }}
+            </div>
+        </a>
+        {% endif %}
+        <p style="text-align: center; margin-top: 10px; font-weight: bold;">{{ shooting.name }}</p>
+    </div>
+    {% endfor %}
 </div>
 
 <!-- Контакты -->

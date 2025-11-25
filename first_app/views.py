@@ -1,16 +1,32 @@
-from django.shortcuts import render
-from .models import Photo, Category, Service
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
+from .models import Photo, Category, Service, ShootingType
+from .forms import ShootingTypeForm
+
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+
+def custom_logout(request):
+    logout(request)
+    return redirect('/login/')
+
+def is_manager(user):
+    return user.is_staff
 
 
 def home(request):
     photos = Photo.objects.all()
-    return render(request, 'portfolio/home.html', {'photos': photos})
-
+    shooting_types = ShootingType.objects.all()  # ДОБАВИЛИ ЭТУ СТРОКУ
+    return render(request, 'portfolio/home.html', {
+        'photos': photos,
+        'shooting_types': shooting_types  # ДОБАВИЛИ ЭТУ СТРОКУ
+    })
 
 def photo_detail(request, photo_id):
     photo = Photo.objects.get(id=photo_id)
     total_photos = Photo.objects.count()
-
     return render(request, 'portfolio/photo_detail.html', {
         'photo': photo,
         'total_photos': total_photos
@@ -19,35 +35,38 @@ def photo_detail(request, photo_id):
 
 def services(request):
     services_list = Service.objects.all()
-    return render(request, 'portfolio/services.html', {'services': services_list})
+    shooting_types = ShootingType.objects.all()
+    return render(request, 'portfolio/services.html', {
+        'services': services_list,
+        'shooting_types': shooting_types
+    })
 
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from django.contrib import messages
-
-
-# ДОБАВЬ ЭТУ ФУНКЦИЮ В views.py
+# ФУНКЦИЯ РЕГИСТРАЦИИ
 def register(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        password_confirm = request.POST.get('password_confirm')
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Аккаунт {username} создан! Теперь можно войти.')
+            return redirect('home')
+    else:
+        form = UserCreationForm()
 
-        # Проверяем что пароли совпадают
-        if password != password_confirm:
-            messages.error(request, 'Пароли не совпадают!')
-            return render(request, 'portfolio/register.html')
+    return render(request, 'portfolio/register.html', {'form': form})
 
-        # Проверяем что пользователь не существует
-        if User.objects.filter(username=username).exists():
-            messages.error(request, 'Пользователь с таким именем уже существует!')
-            return render(request, 'portfolio/register.html')
 
-        # Создаем пользователя
-        User.objects.create_user(username=username, email=email, password=password)
-        messages.success(request, 'Регистрация успешна! Теперь вы можете войти.')
-        return redirect('home')
+# VIEW для добавления видов съемок (только для менеджеров)
+@login_required
+@user_passes_test(is_manager)
+def add_shooting_type(request):
+    if request.method == 'POST':
+        form = ShootingTypeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('services')
+    else:
+        form = ShootingTypeForm()
 
-    return render(request, 'portfolio/register.html')
+    return render(request, 'portfolio/add_shooting_type.html', {'form': form})

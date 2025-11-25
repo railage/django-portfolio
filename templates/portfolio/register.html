@@ -1,42 +1,44 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div style="max-width: 500px; margin: 50px auto; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-    <h1 style="text-align: center; margin-bottom: 30px;">👤 Регистрация</h1>
+<div style="max-width: 400px; margin: 50px auto; padding: 30px; border: 1px solid #ddd; border-radius: 10px;">
+    <h2 style="text-align: center; margin-bottom: 30px;">📝 Регистрация</h2>
 
-    {% if messages %}
-    <div style="margin-bottom: 20px;">
-        {% for message in messages %}
-        <div style="background: {% if message.tags == 'error' %}#e74c3c{% else %}#2ecc71{% endif %}; padding: 10px; border-radius: 8px; text-align: center;">
-            {{ message }}
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    <form method="post" style="display: grid; gap: 20px;">
+    <form method="post">
         {% csrf_token %}
-        
-        <input type="text" name="username" placeholder="Имя пользователя *" required
-               style="padding: 15px; border: none; border-radius: 10px; font-size: 16px; background: rgba(255,255,255,0.9);">
 
-        <input type="email" name="email" placeholder="Email *" required
-               style="padding: 15px; border: none; border-radius: 10px; font-size: 16px; background: rgba(255,255,255,0.9);">
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Имя пользователя:</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <div style="color: red; font-size: 14px;">{{ form.username.errors }}</div>
+            {% endif %}
+        </div>
 
-        <input type="password" name="password" placeholder="Пароль *" required
-               style="padding: 15px; border: none; border-radius: 10px; font-size: 16px; background: rgba(255,255,255,0.9);">
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Пароль:</label>
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+                <div style="color: red; font-size: 14px;">{{ form.password1.errors }}</div>
+            {% endif %}
+        </div>
 
-        <input type="password" name="password_confirm" placeholder="Подтвердите пароль *" required
-               style="padding: 15px; border: none; border-radius: 10px; font-size: 16px; background: rgba(255,255,255,0.9);">
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Подтверждение пароля:</label>
+            {{ form.password2 }}
+            {% if form.password2.errors %}
+                <div style="color: red; font-size: 14px;">{{ form.password2.errors }}</div>
+            {% endif %}
+        </div>
 
         <button type="submit"
-                style="background: linear-gradient(45deg, #2ecc71, #27ae60); color: white; border: none; padding: 16px; border-radius: 10px; font-size: 17px; font-weight: bold; cursor: pointer;">
-            🚀 Зарегистрироваться
+                style="width: 100%; background: #3498db; color: white; border: none; padding: 12px; border-radius: 5px; font-size: 16px; cursor: pointer;">
+            Зарегистрироваться
         </button>
     </form>
 
     <div style="text-align: center; margin-top: 20px;">
-        <a href="/" style="color: white; text-decoration: underline;">← Вернуться на главную</a>
+        <a href="/" style="color: #3498db; text-decoration: none;">← На главную</a>
     </div>
 </div>
 {% endblock %}
