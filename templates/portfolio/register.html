@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 50px auto; padding: 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+    <h1 style="text-align: center; margin-bottom: 30px;">👤 Регистрация</h1>
+
+    {% if messages %}
+    <div style="margin-bottom: 20px;">
+        {% for message in messages %}
+        <div style="background: {% if message.tags == 'error' %}#e74c3c{% else %}#2ecc71{% endif %}; padding: 10px; border-radius: 8px; text-align: center;">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="post" style="display: grid; gap: 20px;">
+        {% csrf_token %}
+        
+        <input type="text" name="username" placeholder="Имя пользователя *" required
+               style="padding: 15px; border: none; border-radius: 10px; font-size: 16px; background: rgba(255,255,255,0.9);">
+
+        <input type="email" name="email" placeholder="Email *" required
+               style="padding: 15px; border: none; border-radius: 10px; font-size: 16px; background: rgba(255,255,255,0.9);">
+
+        <input type="password" name="password" placeholder="Пароль *" required
+               style="padding: 15px; border: none; border-radius: 10px; font-size: 16px; background: rgba(255,255,255,0.9);">
+
+        <input type="password" name="password_confirm" placeholder="Подтвердите пароль *" required
+               style="padding: 15px; border: none; border-radius: 10px; font-size: 16px; background: rgba(255,255,255,0.9);">
+
+        <button type="submit"
+                style="background: linear-gradient(45deg, #2ecc71, #27ae60); color: white; border: none; padding: 16px; border-radius: 10px; font-size: 17px; font-weight: bold; cursor: pointer;">
+            🚀 Зарегистрироваться
+        </button>
+    </form>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="/" style="color: white; text-decoration: underline;">← Вернуться на главную</a>
+    </div>
+</div>
+{% endblock %}
